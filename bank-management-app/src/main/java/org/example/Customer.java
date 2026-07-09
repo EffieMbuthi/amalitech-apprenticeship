@@ -57,4 +57,12 @@ abstract class Customer {
     public abstract String getCustomerType();
 
     public abstract void displayCustomerDetails();
+
+    protected void displayBaseDetails(){
+        System.out.println("Name: " + getName());
+        System.out.println("Age: " + getAge());
+        System.out.println("Type: " + getCustomerType());
+        System.out.println("Address: " + getAddress());
+        System.out.println("Contact: " + getContact());
+    }
 }

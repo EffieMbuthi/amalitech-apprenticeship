@@ -12,10 +12,6 @@ public class RegularCustomer extends Customer {
 
     @Override
     public void displayCustomerDetails() {
-        System.out.println("Name: " + getName());
-        System.out.println("Age: " + getAge());
-        System.out.println("Type: " + getCustomerType());
-        System.out.println("Address: " + getAddress());
-        System.out.println("Contact: " + getContact());
+        displayBaseDetails();
     }
 }
