@@ -9,7 +9,6 @@ abstract class Customer {
 
     private static int customerCounter= 0;
 
-
     public Customer(String name, int age, String contact, String address){
         customerCounter++;
         this.customerId= "CUS" + String.format("%03d",customerCounter);
@@ -27,16 +26,32 @@ abstract class Customer {
         return name;
     }
 
+    public void setName(String name){
+        this.name=name;
+    }
+
     public int getAge() {
         return age;
+    }
+
+    public void setAge(int age){
+        this.age=age;
     }
 
     public String getContact() {
         return contact;
     }
 
+    public void setContact(String contact){
+        this.contact=contact;
+    }
+
     public String getAddress() {
         return address;
+    }
+
+    public void setAddress(String address){
+        this.address=address;
     }
 
     public abstract String getCustomerType();
