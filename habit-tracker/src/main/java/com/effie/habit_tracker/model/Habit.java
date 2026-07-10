@@ -29,7 +29,7 @@ public class Habit {
     private LocalDate createdDate;
 
     @Column(nullable = false)
-    private int currentStreak;
+    private int currentStreak=0;
 
     private LocalDate lastCompletedDate;
 }
