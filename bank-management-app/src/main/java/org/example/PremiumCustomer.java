@@ -23,7 +23,7 @@ public class PremiumCustomer extends Customer{
 
     @Override
     public void displayCustomerDetails() {
-        displayBaseDetails();
+        displayBaseCustomerDetails();
         System.out.println("Minimum Balance: " + getMinimumBalance());
         System.out.println("Priority Service: Yes");
     }

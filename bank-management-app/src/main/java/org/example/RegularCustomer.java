@@ -12,6 +12,6 @@ public class RegularCustomer extends Customer {
 
     @Override
     public void displayCustomerDetails() {
-        displayBaseDetails();
+        displayBaseCustomerDetails();
     }
 }

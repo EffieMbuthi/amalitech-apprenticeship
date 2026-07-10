@@ -20,6 +20,13 @@ abstract class Account {
 
     public abstract String getAccountType();
 
+    protected void displayBaseAccountDetails(){
+        System.out.println("Customer: " + customer.getName());
+        System.out.println("Your balance is: " + balance);
+        System.out.println("Account status: " + status);
+    }
+
+
     public boolean deposit(double amount) {
         if (amount < 0) {
             return false;
@@ -30,7 +37,6 @@ abstract class Account {
     }
 
     public abstract boolean withdraw(double amount);
-
 
 
     public String getAccountNumber() {

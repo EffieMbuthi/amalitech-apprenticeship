@@ -22,7 +22,7 @@ abstract class Customer {
 
     public abstract void displayCustomerDetails();
 
-    protected void displayBaseDetails(){
+    protected void displayBaseCustomerDetails(){
         System.out.println("Name: " + getName());
         System.out.println("Age: " + getAge());
         System.out.println("Type: " + getCustomerType());
