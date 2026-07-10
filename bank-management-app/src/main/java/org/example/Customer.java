@@ -18,6 +18,18 @@ abstract class Customer {
         this.address=address;
     }
 
+    public abstract String getCustomerType();
+
+    public abstract void displayCustomerDetails();
+
+    protected void displayBaseDetails(){
+        System.out.println("Name: " + getName());
+        System.out.println("Age: " + getAge());
+        System.out.println("Type: " + getCustomerType());
+        System.out.println("Address: " + getAddress());
+        System.out.println("Contact: " + getContact());
+    }
+
     public String getCustomerId() {
         return customerId;
     }
@@ -52,17 +64,5 @@ abstract class Customer {
 
     public void setAddress(String address){
         this.address=address;
-    }
-
-    public abstract String getCustomerType();
-
-    public abstract void displayCustomerDetails();
-
-    protected void displayBaseDetails(){
-        System.out.println("Name: " + getName());
-        System.out.println("Age: " + getAge());
-        System.out.println("Type: " + getCustomerType());
-        System.out.println("Address: " + getAddress());
-        System.out.println("Contact: " + getContact());
     }
 }
