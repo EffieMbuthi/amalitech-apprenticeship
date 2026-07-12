@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - 'habit-tracker/**'
+      - '.github/workflows/habit-tracker-ci.yml'
   pull_request:
     paths:
       - 'habit-tracker/**'
+      - '.github/workflows/habit-tracker-ci.yml'
 
 jobs:
   build-and-test:
