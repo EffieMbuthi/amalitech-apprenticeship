@@ -1,6 +1,6 @@
 package org.example;
 
-abstract class Account {
+abstract class Account implements Transactable {
     private String accountNumber;
     private Customer customer;
     private double balance;
@@ -26,6 +26,17 @@ abstract class Account {
         System.out.println("Account type: " + getAccountType());
         System.out.println("Your balance is: " + balance);
         System.out.println("Account status: " + status);
+    }
+
+    @Override
+    public boolean processTransaction(double amount, String type) {
+        if (type.equalsIgnoreCase("DEPOSIT")) {
+            return deposit(amount);
+        } else if (type.equalsIgnoreCase("WITHDRAWAL")) {
+            return withdraw(amount);
+        } else {
+            return false;
+        }
     }
 
 
