@@ -9,6 +9,9 @@ abstract class Account implements Transactable {
     private static int accountCounter= 0;
 
     public Account(Customer customer, double balance) {
+        // Auto-generate a unique, sequential account number using the shared
+        // static counter. Not passed in as a parameter since the system,
+        // not the user, controls this value.
         accountCounter++;
         this.accountNumber= "ACC" + String.format("%03d",accountCounter);
         this.customer = customer;
@@ -28,6 +31,11 @@ abstract class Account implements Transactable {
         System.out.println("Account status: " + status);
     }
 
+    // Single entry point required by the Transactable interface.
+    // Routes to deposit() or withdraw() based on the type string, so
+    // callers (Main) don't need to know which method to call directly.
+    // Relies on polymorphism: withdraw() automatically runs whichever
+    // subclass's version matches the real object at runtime.
     @Override
     public boolean processTransaction(double amount, String type) {
         if (type.equalsIgnoreCase("DEPOSIT")) {
@@ -49,6 +57,9 @@ abstract class Account implements Transactable {
         }
     }
 
+    // Declared abstract because withdrawal rules differ per account type:
+    // SavingsAccount enforces a minimum balance, CheckingAccount allows
+    // overdraft up to a limit. Each subclass provides its own implementation.
     public abstract boolean withdraw(double amount);
 
 

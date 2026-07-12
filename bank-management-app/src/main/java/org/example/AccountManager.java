@@ -14,6 +14,9 @@ public class AccountManager {
         accountCount++;
     }
 
+    // Linear search through the accounts array, O(n) time complexity.
+    // Acceptable here since the array is capped at 50 accounts (fixed,
+    // small size per spec), so performance impact is negligible.
     public Account findAccount(String accountNumber) {
         for (int i = 0; i < accountCount; i++) {
             if (accounts[i].getAccountNumber().equals(accountNumber)) {

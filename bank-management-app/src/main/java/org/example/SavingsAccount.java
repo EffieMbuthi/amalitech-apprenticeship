@@ -22,6 +22,10 @@ public class SavingsAccount extends Account{
         return "Savings";
     }
 
+
+    // Withdrawal is only allowed if the balance AFTER subtraction is still
+    // >= the $500 minimum. Using >= (not >) so a withdrawal that leaves
+    // exactly $500 is accepted, not rejected.
     @Override
     public boolean withdraw(double amount) {
         if ((getBalance()-amount) >= minimumBalance){
@@ -34,6 +38,10 @@ public class SavingsAccount extends Account{
         }
     }
 
+    // Calculates one year's interest on the current balance without
+    // modifying the balance directly. Applying the interest (if needed)
+    // is left to whatever calls this method, keeping the calculation
+    // itself a pure, side-effect-free operation.
     protected double calculateInterest(){
         double interestAmount= getBalance() * interestRate;
         return interestAmount;

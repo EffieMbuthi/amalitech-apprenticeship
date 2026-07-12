@@ -10,6 +10,9 @@ abstract class Customer {
     private static int customerCounter= 0;
 
     public Customer(String name, int age, String contact, String address){
+        // customerCounter is static so it's shared across ALL Customer objects,
+        // ensuring IDs increment sequentially (CUS001, CUS002...) instead of
+        // each object getting its own separate counter starting at 1.
         customerCounter++;
         this.customerId= "CUS" + String.format("%03d",customerCounter);
         this.name=name;

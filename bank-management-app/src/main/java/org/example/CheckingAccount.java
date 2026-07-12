@@ -26,6 +26,9 @@ public class CheckingAccount extends Account {
         }
     }
 
+    // Checking accounts allow the balance to go negative, down to
+    // -overdraftLimit. E.g. with a $1,000 limit, balance can reach
+    // -1000 but not lower. Using >= -overdraftLimit as the boundary.
     @Override
     public boolean withdraw(double amount) {
         if ((getBalance() - amount) >= -overdraftLimit) {
@@ -36,6 +39,9 @@ public class CheckingAccount extends Account {
         }
     }
 
+    // Premium customers have monthly fees waived per business rules.
+    // instanceof checks the real runtime type of the linked Customer
+    // object to decide whether the fee applies.
     public void applyMonthlyFee() {
         if (getCustomer() instanceof PremiumCustomer) {
             return;

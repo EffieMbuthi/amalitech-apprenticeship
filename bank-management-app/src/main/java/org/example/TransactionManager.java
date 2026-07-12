@@ -14,6 +14,10 @@ public class TransactionManager {
         transactionCount++;
     }
 
+    // Iterates backward (from the most recently added transaction to the
+    // earliest) so results display newest-first, per spec, without
+    // needing a separate sort step — new transactions are always
+    // appended at the end of the array.
     public void viewTransactionsByAccount(String accountNumber) {
         boolean found = false;
         for (int i = transactionCount - 1; i >= 0; i--) {

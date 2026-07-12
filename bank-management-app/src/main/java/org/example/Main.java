@@ -120,6 +120,17 @@ public class Main {
                     }
 
                     double previousBalance = account.getBalance();
+                    System.out.println("\nTRANSACTION CONFIRMATION");
+                    System.out.println("Account: " + accNum);
+                    System.out.println("Type: " + type);
+                    System.out.println("Amount: " + amount);
+                    System.out.println("Previous Balance: " + previousBalance);
+                    String confirm = readLine(scanner, "Confirm transaction? (Y/N): ");
+                    if (!confirm.equalsIgnoreCase("Y")) {
+                        System.out.println("Transaction cancelled.");
+                        break;
+                    }
+
                     boolean success = account.processTransaction(amount, type);
 
                     if (success) {
