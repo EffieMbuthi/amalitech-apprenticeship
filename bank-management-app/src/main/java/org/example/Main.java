@@ -3,114 +3,162 @@ package org.example;
 import java.util.Scanner;
 
 public class Main {
+
+    private static int readInt(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a whole number.");
+            }
+        }
+    }
+
+    private static double readDouble(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return Double.parseDouble(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid amount.");
+            }
+        }
+    }
+
+    private static String readLine(Scanner scanner, String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine().trim();
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         AccountManager accountManager = new AccountManager();
         TransactionManager transactionManager = new TransactionManager();
 
+        RegularCustomer c1 = new RegularCustomer("Amari Mutiso", 40, "0700000001", "Nairobi");
+        accountManager.addAccount(new SavingsAccount(c1, 5250.00));
 
-        RegularCustomer c1 = new RegularCustomer("Kimmy Otieno", 40, "0700000001", "Mombasa");
-        SavingsAccount a1 = new SavingsAccount(c1, 52500.00);
-        accountManager.addAccount(a1);
+        RegularCustomer c2 = new RegularCustomer("John Hefari", 35, "0700000002", "Nakuru");
+        accountManager.addAccount(new CheckingAccount(c2, 3450.00));
 
-        RegularCustomer c2 = new RegularCustomer("Sarah Muthoni", 35, "0700000002", "Kiambu");
-        CheckingAccount a2 = new CheckingAccount(c2, 34500.00);
-        accountManager.addAccount(a2);
+        PremiumCustomer c3 = new PremiumCustomer("Michael Muhoro", 50, "0700000003", "Kiambu");
+        accountManager.addAccount(new SavingsAccount(c3, 15750.00));
 
-        PremiumCustomer c3 = new PremiumCustomer("Jamal Kamau", 50, "0700000003", "Nairobi");
-        SavingsAccount a3 = new SavingsAccount(c3, 157500.00);
-        accountManager.addAccount(a3);
+        RegularCustomer c4 = new RegularCustomer("Emma Njonjo", 29, "0700000004", "Mombasa");
+        accountManager.addAccount(new CheckingAccount(c4, 890.00));
 
-        RegularCustomer c4 = new RegularCustomer("Amara Pendo", 29, "0700000004", "Nakuru");
-        CheckingAccount a4 = new CheckingAccount(c4, 8900.00);
-        accountManager.addAccount(a4);
-
-        PremiumCustomer c5 = new PremiumCustomer("David Wainaina", 60, "0700000005", "Nyahururu");
-        SavingsAccount a5 = new SavingsAccount(c5, 253000.00);
-        accountManager.addAccount(a5);
+        PremiumCustomer c5 = new PremiumCustomer("Kimanzi Oti", 60, "0700000005", "Nairobi");
+        accountManager.addAccount(new SavingsAccount(c5, 25300.00));
 
         boolean running = true;
         while (running) {
-            System.out.println("\n1. Create Account\n2. View Accounts\n3. Process Transaction\n4. View Transaction History\n5. Exit");
-            System.out.print("Enter choice: ");
-            int choice = Integer.parseInt(scanner.nextLine());
+            System.out.println("\n╔════════════════════════════════════════════╗");
+            System.out.println("║   BANK ACCOUNT MANAGEMENT - MAIN MENU      ║");
+            System.out.println("╚════════════════════════════════════════════╝");
+            System.out.println("1. Create Account");
+            System.out.println("2. View Accounts");
+            System.out.println("3. Process Transaction");
+            System.out.println("4. View Transaction History");
+            System.out.println("5. Exit");
+
+            int choice = readInt(scanner, "Enter choice: ");
 
             switch (choice) {
-                case 1:
-                    System.out.print("Enter customer name: ");
-                    String name = scanner.nextLine();
-                    System.out.print("Enter customer age: ");
-                    int age = Integer.parseInt(scanner.nextLine());
-                    System.out.print("Enter customer contact: ");
-                    String contact = scanner.nextLine();
-                    System.out.print("Enter customer address: ");
-                    String address = scanner.nextLine();
+                case 1: {
+                    String name = readLine(scanner, "Enter customer name: ");
+                    int age = readInt(scanner, "Enter customer age: ");
+                    String contact = readLine(scanner, "Enter customer contact: ");
+                    String address = readLine(scanner, "Enter customer address: ");
 
-                    System.out.print("Customer type (1-Regular, 2-Premium): ");
-                    int custType = Integer.parseInt(scanner.nextLine());
+                    System.out.println("Customer type:\n1. Regular Customer\n2. Premium Customer");
+                    int custType = readInt(scanner, "Select type (1-2): ");
                     Customer customer = (custType == 2)
                             ? new PremiumCustomer(name, age, contact, address)
                             : new RegularCustomer(name, age, contact, address);
 
-                    System.out.print("Account type (1-Savings, 2-Checking): ");
-                    int accType = Integer.parseInt(scanner.nextLine());
-                    System.out.print("Enter initial deposit amount: ");
-                    double initialDeposit = Double.parseDouble(scanner.nextLine());
+                    System.out.println("Account type:\n1. Savings Account\n2. Checking Account");
+                    int accType = readInt(scanner, "Select type (1-2): ");
+                    double initialDeposit = readDouble(scanner, "Enter initial deposit amount: $");
+
+                    if (initialDeposit <= 0) {
+                        System.out.println("Initial deposit must be positive. Account not created.");
+                        break;
+                    }
 
                     Account newAccount = (accType == 2)
                             ? new CheckingAccount(customer, initialDeposit)
                             : new SavingsAccount(customer, initialDeposit);
 
                     accountManager.addAccount(newAccount);
-                    System.out.println("Account created successfully!");
+                    System.out.println("\n✓ Account created successfully!");
                     newAccount.displayAccountDetails();
                     break;
+                }
 
                 case 2:
                     accountManager.viewAllAccounts();
                     break;
 
-                case 3:
-                    System.out.print("Enter Account Number: ");
-                    String accNum = scanner.nextLine();
+                case 3: {
+                    String accNum = readLine(scanner, "Enter Account Number: ");
                     Account account = accountManager.findAccount(accNum);
                     if (account == null) {
                         System.out.println("Account not found.");
                         break;
                     }
                     account.displayAccountDetails();
-                    System.out.print("Transaction type (1-Deposit, 2-Withdrawal): ");
-                    int txnType = Integer.parseInt(scanner.nextLine());
-                    String type = (txnType == 2) ? "WITHDRAWAL" : "DEPOSIT";
-                    System.out.print("Enter amount: ");
-                    double amount = Double.parseDouble(scanner.nextLine());
 
+                    System.out.println("Transaction type:\n1. Deposit\n2. Withdrawal");
+                    int txnType = readInt(scanner, "Select type (1-2): ");
+                    String type = (txnType == 2) ? "WITHDRAWAL" : "DEPOSIT";
+                    double amount = readDouble(scanner, "Enter amount: $");
+
+                    if (amount <= 0) {
+                        System.out.println("Amount must be positive.");
+                        break;
+                    }
+
+                    double previousBalance = account.getBalance();
                     boolean success = account.processTransaction(amount, type);
+
                     if (success) {
                         Transaction txn = new Transaction(accNum, type, amount, account.getBalance());
                         transactionManager.addTransaction(txn);
-                        System.out.println("Transaction completed successfully!");
-                        txn.displayTransactionDetails();
+                        System.out.println("\nTRANSACTION CONFIRMATION");
+                        System.out.println("Transaction ID: " + txn.getTransactionId());
+                        System.out.println("Previous Balance: " + previousBalance);
+                        System.out.println("New Balance: " + account.getBalance());
+                        System.out.println("✓ Transaction completed successfully!");
                     } else {
-                        System.out.println("Transaction failed. Check balance/limits.");
+                        System.out.println("✗ Transaction failed. Insufficient funds or limit exceeded.");
                     }
                     break;
+                }
 
-                case 4:
-                    System.out.print("Enter Account Number: ");
-                    String histAccNum = scanner.nextLine();
+                case 4: {
+                    String histAccNum = readLine(scanner, "Enter Account Number: ");
+                    Account account = accountManager.findAccount(histAccNum);
+                    if (account == null) {
+                        System.out.println("Account not found.");
+                        break;
+                    }
                     transactionManager.viewTransactionsByAccount(histAccNum);
-                    System.out.println("Total Deposits: " + transactionManager.calculateTotalDeposits(histAccNum));
-                    System.out.println("Total Withdrawals: " + transactionManager.calculateTotalWithdrawals(histAccNum));
+                    double deposits = transactionManager.calculateTotalDeposits(histAccNum);
+                    double withdrawals = transactionManager.calculateTotalWithdrawals(histAccNum);
+                    System.out.println("Total Deposits: " + deposits);
+                    System.out.println("Total Withdrawals: " + withdrawals);
+                    System.out.println("Net Change: " + (deposits - withdrawals));
                     break;
+                }
 
                 case 5:
                     running = false;
-                    System.out.println("Thank you for using Banking with us! Goodbye!");
+                    System.out.println("Thank you for Banking with us!\nGoodbye!");
                     break;
 
                 default:
-                    System.out.println("Invalid choice.");
+                    System.out.println("Invalid choice. Please select 1-5.");
             }
         }
         scanner.close();

@@ -19,7 +19,11 @@ public class CheckingAccount extends Account {
     public void displayAccountDetails() {
         displayBaseAccountDetails();
         System.out.println("Overdraft limit: " + overdraftLimit);
-        System.out.println("Monthly fee: " + monthlyFee);
+        if (getCustomer() instanceof PremiumCustomer) {
+            System.out.println("Monthly Fee: $0.00 (WAIVED - Premium Customer)");
+        } else {
+            System.out.println("Monthly Fee: " + monthlyFee);
+        }
     }
 
     @Override
@@ -33,6 +37,9 @@ public class CheckingAccount extends Account {
     }
 
     public void applyMonthlyFee() {
+        if (getCustomer() instanceof PremiumCustomer) {
+            return;
+        }
         setBalance(getBalance() - monthlyFee);
     }
 }
