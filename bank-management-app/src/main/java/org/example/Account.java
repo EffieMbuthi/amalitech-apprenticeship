@@ -21,7 +21,9 @@ abstract class Account {
     public abstract String getAccountType();
 
     protected void displayBaseAccountDetails(){
+        System.out.println("Account no: " + accountNumber);
         System.out.println("Customer: " + customer.getName());
+        System.out.println("Account type: " + getAccountType());
         System.out.println("Your balance is: " + balance);
         System.out.println("Account status: " + status);
     }
