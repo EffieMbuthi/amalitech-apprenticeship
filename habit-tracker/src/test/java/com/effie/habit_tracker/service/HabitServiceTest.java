@@ -18,6 +18,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -121,5 +122,40 @@ class HabitServiceTest {
         when(habitRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(HabitNotFoundException.class, () -> habitService.completeHabit(99L));
+    }
+
+    @Test
+    void getStreak_habitExists_returnsCurrentStreak() {
+        Habit habit = new Habit();
+        habit.setCurrentStreak(4);
+
+        when(habitRepository.findById(1L)).thenReturn(Optional.of(habit));
+
+        int streak = habitService.getStreak(1L);
+
+        assertThat(streak).isEqualTo(4);
+    }
+
+    @Test
+    void getStreak_habitDoesNotExist_throwsException() {
+        when(habitRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(HabitNotFoundException.class, () -> habitService.getStreak(99L));
+    }
+
+    @Test
+    void deleteHabit_habitExists_deletesSuccessfully() {
+        when(habitRepository.existsById(1L)).thenReturn(true);
+
+        habitService.deleteHabit(1L);
+
+        verify(habitRepository).deleteById(1L);
+    }
+
+    @Test
+    void deleteHabit_habitDoesNotExist_throwsException() {
+        when(habitRepository.existsById(99L)).thenReturn(false);
+
+        assertThrows(HabitNotFoundException.class, () -> habitService.deleteHabit(99L));
     }
 }
