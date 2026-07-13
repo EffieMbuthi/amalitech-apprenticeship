@@ -6,6 +6,8 @@ import com.effie.habit_tracker.exceptions.HabitNotFoundException;
 import com.effie.habit_tracker.model.Habit;
 import com.effie.habit_tracker.repository.HabitRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,6 +18,8 @@ import java.util.List;
 public class HabitService {
 
     private final HabitRepository habitRepository;
+
+    private static final Logger log = LoggerFactory.getLogger(HabitService.class);
 
     public List<HabitResponse> listHabits() {
         return habitRepository.findAll()
@@ -29,6 +33,7 @@ public class HabitService {
         newHabit.setName(request.getName());
         newHabit.setCreatedDate(LocalDate.now());
         Habit saved = habitRepository.save(newHabit);
+        log.info("Habit created: id={}, name={}", saved.getId(), saved.getName());
         return toResponse(saved);
     }
 
@@ -41,12 +46,16 @@ public class HabitService {
 
         if (lastCompletedDate == null) {
             habit.setCurrentStreak(1);
+            log.info("Habit {} completed for the first time, streak set to 1", id);
         } else if (lastCompletedDate.isEqual(today)) {
+            log.info("Habit {} already completed today, streak unchanged", id);
             return toResponse(habit);
         } else if (lastCompletedDate.isEqual(today.minusDays(1))) {
             habit.setCurrentStreak(habit.getCurrentStreak() + 1);
+            log.info("Habit {} streak incremented to {}", id, habit.getCurrentStreak());
         } else {
             habit.setCurrentStreak(1);
+            log.info("Habit {} missed a day, streak reset to 1", id);
         }
 
         habit.setLastCompletedDate(today);
@@ -74,6 +83,7 @@ public class HabitService {
         if (!habitRepository.existsById(id)) {
             throw new HabitNotFoundException(id);
         }
+        log.info("Habit {} deleted", id);
         habitRepository.deleteById(id);
     }
 }
