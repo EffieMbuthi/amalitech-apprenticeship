@@ -34,4 +34,16 @@ public class HabitController {
         HabitResponse response = habitService.completeHabit(id);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{id}/streak")
+    public ResponseEntity<Integer> getStreak(@PathVariable Long id) {
+        int streak = habitService.getStreak(id);
+        return ResponseEntity.ok(streak);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteHabit(@PathVariable Long id) {
+        habitService.deleteHabit(id);
+        return ResponseEntity.noContent().build();
+    }
 }

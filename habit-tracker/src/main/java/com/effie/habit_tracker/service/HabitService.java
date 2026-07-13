@@ -63,4 +63,17 @@ public class HabitService {
                 habit.getLastCompletedDate()
         );
     }
+
+    public int getStreak(Long id) {
+        Habit habit = habitRepository.findById(id)
+                .orElseThrow(() -> new HabitNotFoundException(id));
+        return habit.getCurrentStreak();
+    }
+
+    public void deleteHabit(Long id) {
+        if (!habitRepository.existsById(id)) {
+            throw new HabitNotFoundException(id);
+        }
+        habitRepository.deleteById(id);
+    }
 }
