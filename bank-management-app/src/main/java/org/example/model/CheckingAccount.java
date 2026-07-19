@@ -1,4 +1,7 @@
-package org.example;
+package org.example.model;
+
+import org.example.exceptions.InvalidAmountException;
+import org.example.exceptions.OverdraftExceededException;
 
 public class CheckingAccount extends Account {
     private double overdraftLimit;
@@ -30,14 +33,15 @@ public class CheckingAccount extends Account {
     // -overdraftLimit. E.g. with a $1,000 limit, balance can reach
     // -1000 but not lower. Using >= -overdraftLimit as the boundary.
     @Override
-    public boolean withdraw(double amount) {
-        if ((getBalance() - amount) >= -overdraftLimit) {
-            setBalance(getBalance() - amount);
-            return true;
-        } else {
-            return false;
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new InvalidAmountException("The amount must be greater than 0");
         }
-    }
+        if ((getBalance() - amount) < -overdraftLimit) {
+            throw new OverdraftExceededException("Overdraft limit exceeded. Current balance: $" + getBalance());
+        }
+        setBalance(getBalance()-amount);
+        }
 
     // Premium customers have monthly fees waived per business rules.
     // instanceof checks the real runtime type of the linked Customer

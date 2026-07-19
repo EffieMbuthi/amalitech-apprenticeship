@@ -1,6 +1,9 @@
-package org.example;
+package org.example.model;
 
-public class SavingsAccount extends Account{
+import org.example.exceptions.InsufficientFundsException;
+import org.example.exceptions.InvalidAmountException;
+
+public class SavingsAccount extends Account {
     private double interestRate;
     private double minimumBalance;
 
@@ -27,16 +30,15 @@ public class SavingsAccount extends Account{
     // >= the $500 minimum. Using >= (not >) so a withdrawal that leaves
     // exactly $500 is accepted, not rejected.
     @Override
-    public boolean withdraw(double amount) {
-        if ((getBalance()-amount) >= minimumBalance){
-            double newBalance= getBalance()- amount;
-            setBalance(newBalance);
-            return true;
+    public void withdraw(double amount) {
+        if (amount<=0){
+            throw new InvalidAmountException("The amount must be greater than 0");
         }
-        else{
-            return false;
+        if ((getBalance()-amount) < minimumBalance){
+            throw new InsufficientFundsException("Insufficient funds. Current balance: $" + getBalance());
         }
-    }
+        setBalance(getBalance() - amount);
+        }
 
     // Calculates one year's interest on the current balance without
     // modifying the balance directly. Applying the interest (if needed)

@@ -1,6 +1,9 @@
-package org.example;
+package org.example.model;
 
-abstract class Account implements Transactable {
+import org.example.Transactable;
+import org.example.exceptions.InvalidAmountException;
+
+public abstract class Account implements Transactable {
     private String accountNumber;
     private Customer customer;
     private double balance;
@@ -37,30 +40,29 @@ abstract class Account implements Transactable {
     // Relies on polymorphism: withdraw() automatically runs whichever
     // subclass's version matches the real object at runtime.
     @Override
-    public boolean processTransaction(double amount, String type) {
+    public void processTransaction(double amount, String type) {
         if (type.equalsIgnoreCase("DEPOSIT")) {
-            return deposit(amount);
+            deposit(amount);
         } else if (type.equalsIgnoreCase("WITHDRAWAL")) {
-            return withdraw(amount);
+            withdraw(amount);
         } else {
-            return false;
+            throw new IllegalArgumentException("Unknown transaction type: " +type);
         }
     }
 
 
-    public boolean deposit(double amount) {
-        if (amount < 0) {
-            return false;
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new InvalidAmountException("The amount must be greater than 0");
         } else {
             balance = amount + balance;
-            return true;
         }
     }
 
     // Declared abstract because withdrawal rules differ per account type:
     // SavingsAccount enforces a minimum balance, CheckingAccount allows
     // overdraft up to a limit. Each subclass provides its own implementation.
-    public abstract boolean withdraw(double amount);
+    public abstract void withdraw(double amount);
 
 
     public String getAccountNumber() {
@@ -90,5 +92,4 @@ abstract class Account implements Transactable {
     public void setStatus(String status) {
         this.status = status;
     }
-
 }

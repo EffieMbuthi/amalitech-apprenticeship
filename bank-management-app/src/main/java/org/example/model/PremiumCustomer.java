@@ -1,6 +1,6 @@
-package org.example;
+package org.example.model;
 
-public class PremiumCustomer extends Customer{
+public class PremiumCustomer extends Customer {
     private double minimumBalance;
 
     public PremiumCustomer(String name, int age, String contact, String address) {

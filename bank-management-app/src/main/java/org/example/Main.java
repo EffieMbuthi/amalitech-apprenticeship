@@ -1,5 +1,11 @@
 package org.example;
 
+import org.example.exceptions.InsufficientFundsException;
+import org.example.exceptions.InvalidAmountException;
+import org.example.exceptions.OverdraftExceededException;
+import org.example.model.*;
+import org.example.service.*;
+
 import java.util.Scanner;
 
 public class Main {
@@ -131,9 +137,8 @@ public class Main {
                         break;
                     }
 
-                    boolean success = account.processTransaction(amount, type);
-
-                    if (success) {
+                    try{
+                        account.processTransaction(amount, type);
                         Transaction txn = new Transaction(accNum, type, amount, account.getBalance());
                         transactionManager.addTransaction(txn);
                         System.out.println("\nTRANSACTION CONFIRMATION");
@@ -141,8 +146,15 @@ public class Main {
                         System.out.println("Previous Balance: " + previousBalance);
                         System.out.println("New Balance: " + account.getBalance());
                         System.out.println("✓ Transaction completed successfully!");
-                    } else {
-                        System.out.println("✗ Transaction failed. Insufficient funds or limit exceeded.");
+                    }
+                    catch (InvalidAmountException e){
+                        System.out.println("❌ ERROR: " + e.getMessage());
+                    }
+                    catch (InsufficientFundsException e){
+                        System.out.println("❌ TRANSACTION FAILED! " + e.getMessage());
+                    }
+                    catch (OverdraftExceededException e){
+                        System.out.println("❌ TRANSACTION FAILED! " + e.getMessage());
                     }
                     break;
                 }

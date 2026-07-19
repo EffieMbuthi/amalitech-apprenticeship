@@ -1,5 +1,5 @@
 package org.example;
 
 public interface Transactable {
-    boolean processTransaction(double amount, String type);
+    void processTransaction(double amount, String type);
 }
