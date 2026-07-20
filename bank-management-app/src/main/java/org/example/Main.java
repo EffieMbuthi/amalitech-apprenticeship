@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.exceptions.InsufficientFundsException;
+import org.example.exceptions.InvalidAccountException;
 import org.example.exceptions.InvalidAmountException;
 import org.example.exceptions.OverdraftExceededException;
 import org.example.model.*;
@@ -108,37 +109,34 @@ public class Main {
 
                 case 3: {
                     String accNum = readLine(scanner, "Enter Account Number: ");
-                    Account account = accountManager.findAccount(accNum);
-                    if (account == null) {
-                        System.out.println("Account not found.");
-                        break;
-                    }
-                    account.displayAccountDetails();
-
-                    System.out.println("Transaction type:\n1. Deposit\n2. Withdrawal");
-                    int txnType = readInt(scanner, "Select type (1-2): ");
-                    String type = (txnType == 2) ? "WITHDRAWAL" : "DEPOSIT";
-                    double amount = readDouble(scanner, "Enter amount: $");
-
-                    if (amount <= 0) {
-                        System.out.println("Amount must be positive.");
-                        break;
-                    }
-
-                    double previousBalance = account.getBalance();
-                    System.out.println("\nTRANSACTION CONFIRMATION");
-                    System.out.println("Account: " + accNum);
-                    System.out.println("Type: " + type);
-                    System.out.println("Amount: " + amount);
-                    System.out.println("Previous Balance: " + previousBalance);
-                    String confirm = readLine(scanner, "Confirm transaction? (Y/N): ");
-                    if (!confirm.equalsIgnoreCase("Y")) {
-                        System.out.println("Transaction cancelled.");
-                        break;
-                    }
 
                     try{
+                        Account account = accountManager.findAccount(accNum);
+                        account.displayAccountDetails();
+
+                        System.out.println("Transaction type:\n1. Deposit\n2. Withdrawal");
+                        int txnType = readInt(scanner, "Select type (1-2): ");
+                        String type = (txnType == 2) ? "WITHDRAWAL" : "DEPOSIT";
+                        double amount = readDouble(scanner, "Enter amount: $");
+
+                        if (amount <= 0) {
+                            System.out.println("Amount must be positive.");
+                            break;
+                        }
+
+                        double previousBalance = account.getBalance();
+                        System.out.println("\nTRANSACTION CONFIRMATION");
+                        System.out.println("Account: " + accNum);
+                        System.out.println("Type: " + type);
+                        System.out.println("Amount: " + amount);
+                        System.out.println("Previous Balance: " + previousBalance);
+                        String confirm = readLine(scanner, "Confirm transaction? (Y/N): ");
+                        if (!confirm.equalsIgnoreCase("Y")) {
+                            System.out.println("Transaction cancelled.");
+                            break;
+                        }
                         account.processTransaction(amount, type);
+
                         Transaction txn = new Transaction(accNum, type, amount, account.getBalance());
                         transactionManager.addTransaction(txn);
                         System.out.println("\nTRANSACTION CONFIRMATION");
@@ -161,17 +159,20 @@ public class Main {
 
                 case 4: {
                     String histAccNum = readLine(scanner, "Enter Account Number: ");
-                    Account account = accountManager.findAccount(histAccNum);
-                    if (account == null) {
-                        System.out.println("Account not found.");
-                        break;
+
+                    try {
+                        accountManager.findAccount(histAccNum);
+
+                        transactionManager.viewTransactionsByAccount(histAccNum);
+                        double deposits = transactionManager.calculateTotalDeposits(histAccNum);
+                        double withdrawals = transactionManager.calculateTotalWithdrawals(histAccNum);
+                        System.out.println("Total Deposits: " + deposits);
+                        System.out.println("Total Withdrawals: " + withdrawals);
+                        System.out.println("Net Change: " + (deposits - withdrawals));
                     }
-                    transactionManager.viewTransactionsByAccount(histAccNum);
-                    double deposits = transactionManager.calculateTotalDeposits(histAccNum);
-                    double withdrawals = transactionManager.calculateTotalWithdrawals(histAccNum);
-                    System.out.println("Total Deposits: " + deposits);
-                    System.out.println("Total Withdrawals: " + withdrawals);
-                    System.out.println("Net Change: " + (deposits - withdrawals));
+                    catch(InvalidAccountException e){
+                        System.out.println("❌ ERROR: " + e.getMessage());
+                    }
                     break;
                 }
 

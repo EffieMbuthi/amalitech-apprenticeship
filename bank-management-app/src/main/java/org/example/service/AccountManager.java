@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.exceptions.InvalidAccountException;
 import org.example.model.Account;
 
 public class AccountManager {
@@ -25,7 +26,7 @@ public class AccountManager {
                 return accounts[i];
             }
         }
-        return null;
+        throw new InvalidAccountException("Account not found!");
     }
 
     public void viewAllAccounts() {
