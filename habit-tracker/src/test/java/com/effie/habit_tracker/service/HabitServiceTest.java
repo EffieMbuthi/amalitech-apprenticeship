@@ -18,6 +18,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -87,6 +88,7 @@ class HabitServiceTest {
         HabitResponse response = habitService.completeHabit(1L);
 
         assertThat(response.getCurrentStreak()).isEqualTo(3);
+        verify(habitRepository, never()).save(any(Habit.class));
     }
 
     @Test
@@ -108,6 +110,20 @@ class HabitServiceTest {
         Habit habit = new Habit();
         habit.setCurrentStreak(5);
         habit.setLastCompletedDate(LocalDate.now().minusDays(3));
+
+        when(habitRepository.findById(1L)).thenReturn(Optional.of(habit));
+        when(habitRepository.save(any(Habit.class))).thenReturn(habit);
+
+        HabitResponse response = habitService.completeHabit(1L);
+
+        assertThat(response.getCurrentStreak()).isEqualTo(1);
+    }
+
+    @Test
+    void completeHabit_completedTwoDaysAgo_streakResetsToOne() {
+        Habit habit = new Habit();
+        habit.setCurrentStreak(3);
+        habit.setLastCompletedDate(LocalDate.now().minusDays(2));
 
         when(habitRepository.findById(1L)).thenReturn(Optional.of(habit));
         when(habitRepository.save(any(Habit.class))).thenReturn(habit);
@@ -157,5 +173,6 @@ class HabitServiceTest {
         when(habitRepository.existsById(99L)).thenReturn(false);
 
         assertThrows(HabitNotFoundException.class, () -> habitService.deleteHabit(99L));
+        verify(habitRepository, never()).deleteById(99L);
     }
 }
