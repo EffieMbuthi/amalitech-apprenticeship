@@ -36,7 +36,8 @@ public class TransactionManager {
     public double calculateTotalDeposits(String accountNumber) {
         double total = 0;
         for (int i = 0; i < transactionCount; i++) {
-            if (transactions[i].getAccountNumber().equals(accountNumber) && transactions[i].getType().equalsIgnoreCase("DEPOSIT")) {
+            if (transactions[i].getAccountNumber().equals(accountNumber) &&
+                    transactions[i].getType().equalsIgnoreCase("DEPOSIT")) {
                 total += transactions[i].getAmount();
             }
         }
