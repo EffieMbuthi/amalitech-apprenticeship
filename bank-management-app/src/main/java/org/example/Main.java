@@ -34,8 +34,15 @@ public class Main {
     }
 
     private static String readLine(Scanner scanner, String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine().trim();
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("Input cannot be empty. Please try again.");
+            } else {
+                return input;
+            }
+        }
     }
 
     public static void main(String[] args) {
