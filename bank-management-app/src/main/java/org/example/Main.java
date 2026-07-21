@@ -152,6 +152,9 @@ public class Main {
                         System.out.println("New Balance: " + account.getBalance());
                         System.out.println("✓ Transaction completed successfully!");
                     }
+                    catch (InvalidAccountException e){
+                        System.out.println("❌ ERROR: " + e.getMessage());
+                    }
                     catch (InvalidAmountException e){
                         System.out.println("❌ ERROR: " + e.getMessage());
                     }

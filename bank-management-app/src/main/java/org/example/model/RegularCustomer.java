@@ -15,14 +15,4 @@ public class RegularCustomer extends Customer {
         displayBaseCustomerDetails();
     }
 
-    @Override
-    public int showOverriding(int a) {
-        int f= a * 12;
-        return f;
-    }
-
-    public int showOverriding(int a, int b) {
-        int f= a * 12;
-        return f;
-    }
 }
