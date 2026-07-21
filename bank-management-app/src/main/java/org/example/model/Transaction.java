@@ -41,6 +41,7 @@ public class Transaction {
         return type;
     }
 
+
     public double getAmount() {
         return amount;
     }
