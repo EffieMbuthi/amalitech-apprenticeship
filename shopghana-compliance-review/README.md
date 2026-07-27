@@ -106,7 +106,7 @@ Lukas has a strong right to erasure (Article 17 - "Right to be Forgotten").
 
 ---
 
-### AI Bias Risk — Fraud/Dispute-Detection System
+### AI Bias Risk:  Fraud/Dispute-Detection System
 
 GDPR introduces strict rules via **Article 22**:
 
@@ -125,7 +125,7 @@ Maria has:
 - Right to deletion  
 - Right to opt-out of sale of personal data  
 
-**Can Deletion Be Immediate?** No — due to an active dispute.
+**Can Deletion Be Immediate?** No, due to an active dispute.
 
 **Company Obligations**
 - Pause deletion until dispute resolution  
@@ -153,7 +153,7 @@ Maria has:
 
 ---
 
-### AI Bias Risk — Fraud/Dispute-Detection System
+### AI Bias Risk: Fraud/Dispute-Detection System
 
 - ADMT rules require **transparency and possible opt-out**.  
 - Bias in training data may over-flag certain groups.  
