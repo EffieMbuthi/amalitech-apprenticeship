@@ -2,51 +2,46 @@ package org.example.service;
 
 import org.example.exceptions.InvalidAccountException;
 import org.example.model.Account;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AccountManager {
-    private Account[] accounts;
-    private int accountCount;
+    private Map<String, Account> accounts;
 
     public AccountManager() {
-        accounts = new Account[50];
-        accountCount = 0;
+        accounts = new HashMap<>(50);
     }
 
     public void addAccount(Account account) {
-        accounts[accountCount] = account;
-        accountCount++;
+        accounts.put(account.getAccountNumber(), account);
     }
 
-    // Linear search through the accounts array, O(n) time complexity.
-    // Acceptable here since the array is capped at 50 accounts (fixed,
-    // small size per spec), so performance impact is negligible.
     public Account findAccount(String accountNumber) {
-        for (int i = 0; i < accountCount; i++) {
-            if (accounts[i].getAccountNumber().equals(accountNumber)) {
-                return accounts[i];
-            }
+        Account account= accounts.get(accountNumber);
+        if (account==null){
+            throw new InvalidAccountException("Account not found!");
         }
-        throw new InvalidAccountException("Account not found!");
+        return account;
     }
 
     public void viewAllAccounts() {
-        for (int i = 0; i < accountCount; i++) {
-            accounts[i].displayAccountDetails();
+        for (Account a: accounts.values()){
+            a.displayAccountDetails();
             System.out.println("---------------------------");
         }
-        System.out.println("Total Accounts: " + accountCount);
+        System.out.println("Total Accounts: " + getAccountCount());
         System.out.println("Total Bank Balance: " + getTotalBalance());
     }
 
     public double getTotalBalance() {
-        double total = 0;
-        for (int i = 0; i < accountCount; i++) {
-            total += accounts[i].getBalance();
+        double total=0;
+        for (Account a: accounts.values()){
+            total= total+ a.getBalance();
         }
         return total;
     }
 
     public int getAccountCount() {
-        return accountCount;
+        return accounts.size();
     }
 }
