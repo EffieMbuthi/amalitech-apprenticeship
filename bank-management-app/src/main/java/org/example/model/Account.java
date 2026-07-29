@@ -22,6 +22,14 @@ public abstract class Account implements Transactable {
         this.status= "Active";
     }
 
+    public Account(String accountNumber, Customer customer, double balance, String status){
+        this.accountNumber=accountNumber;
+        this.customer= customer;
+        this.balance=balance;
+        this.status= status;
+    }
+
+
     public abstract void displayAccountDetails();
 
     public abstract String getAccountType();
@@ -64,6 +72,10 @@ public abstract class Account implements Transactable {
     // overdraft up to a limit. Each subclass provides its own implementation.
     public abstract void withdraw(double amount);
 
+
+    public static void setAccountCounter(int accountCounter) {
+        Account.accountCounter = accountCounter;
+    }
 
     public String getAccountNumber() {
         return accountNumber;

@@ -21,6 +21,14 @@ public abstract class Customer {
         this.address=address;
     }
 
+    public Customer(String customerId, String name, int age, String contact, String address){
+        this.customerId= customerId;
+        this.name= name;
+        this.age=age;
+        this.contact= contact;
+        this.address= address;
+    }
+
     public int showOverriding(int a){
         return a;
     }
@@ -35,6 +43,10 @@ public abstract class Customer {
         System.out.println("Type: " + getCustomerType());
         System.out.println("Address: " + getAddress());
         System.out.println("Contact: " + getContact());
+    }
+
+    public static void setCustomerCounter(int customerCounter) {
+        Customer.customerCounter = customerCounter;
     }
 
     public String getCustomerId() {

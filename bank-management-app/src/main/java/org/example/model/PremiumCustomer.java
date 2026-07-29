@@ -8,6 +8,11 @@ public class PremiumCustomer extends Customer {
         this.minimumBalance= 10000.0;
     }
 
+    public PremiumCustomer(String customerId, String name, int age, String contact, String address){
+        super(customerId, name, age, contact, address);
+        this.minimumBalance= 10000.0;
+    }
+
     public double getMinimumBalance() {
         return minimumBalance;
     }

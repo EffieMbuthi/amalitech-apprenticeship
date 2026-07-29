@@ -13,6 +13,12 @@ public class CheckingAccount extends Account {
         this.monthlyFee = 10.0;
     }
 
+    public CheckingAccount(String accountNumber, Customer customer, double balance, String status){
+        super(accountNumber, customer, balance, status);
+        this.overdraftLimit = 1000.0;
+        this.monthlyFee = 10.0;
+    }
+
     @Override
     public String getAccountType() {
         return "Checking";

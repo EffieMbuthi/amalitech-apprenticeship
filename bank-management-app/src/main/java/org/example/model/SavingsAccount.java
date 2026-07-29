@@ -13,6 +13,13 @@ public class SavingsAccount extends Account {
         this.minimumBalance=500.0;
     }
 
+    public SavingsAccount(String accountNumber, Customer customer, double balance, String status){
+        super(accountNumber, customer, balance, status);
+        this.interestRate=0.035;
+        this.minimumBalance=500.0;
+    }
+
+
     @Override
     public void displayAccountDetails() {
         displayBaseAccountDetails();
