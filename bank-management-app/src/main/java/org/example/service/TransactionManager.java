@@ -1,30 +1,30 @@
 package org.example.service;
 
 import org.example.model.Transaction;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransactionManager {
-    private Transaction[] transactions;
-    private int transactionCount;
+    private List<Transaction> transactions;
 
     public TransactionManager() {
-        transactions = new Transaction[200];
-        transactionCount = 0;
+        transactions = new ArrayList<>();
     }
 
     public void addTransaction(Transaction transaction) {
-        transactions[transactionCount] = transaction;
-        transactionCount++;
+        transactions.add(transaction);
     }
 
-    // Iterates backward (from the most recently added transaction to the
-    // earliest) so results display newest-first, per spec, without
+    // Iterates backward (from the most recently added transaction to the earliest)
+    // so results display *newest-first*, per spec, without
     // needing a separate sort step — new transactions are always
-    // appended at the end of the array.
+    // appended at the end of the arraylist.
     public void viewTransactionsByAccount(String accountNumber) {
         boolean found = false;
-        for (int i = transactionCount - 1; i >= 0; i--) {
-            if (transactions[i].getAccountNumber().equals(accountNumber)) {
-                transactions[i].displayTransactionDetails();
+        for (int i = getTransactionCount() - 1; i >= 0; i--) {
+            Transaction transaction= transactions.get(i);
+            if (transaction.getAccountNumber().equals(accountNumber)) {
+                transaction.displayTransactionDetails();
                 found = true;
             }
         }
@@ -34,27 +34,26 @@ public class TransactionManager {
     }
 
     public double calculateTotalDeposits(String accountNumber) {
-        double total = 0;
-        for (int i = 0; i < transactionCount; i++) {
-            if (transactions[i].getAccountNumber().equals(accountNumber) &&
-                    transactions[i].getType().equalsIgnoreCase("DEPOSIT")) {
-                total += transactions[i].getAmount();
-            }
-        }
-        return total;
+        double result = transactions.stream()
+                .filter(t-> t.getAccountNumber().equals(accountNumber) &&
+                        t.getType().equalsIgnoreCase("DEPOSIT"))
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+
+        return result;
     }
 
     public double calculateTotalWithdrawals(String accountNumber) {
-        double total = 0;
-        for (int i = 0; i < transactionCount; i++) {
-            if (transactions[i].getAccountNumber().equals(accountNumber) && transactions[i].getType().equalsIgnoreCase("WITHDRAWAL")) {
-                total += transactions[i].getAmount();
-            }
-        }
-        return total;
+        double result= transactions.stream()
+                .filter(t->t.getAccountNumber().equals(accountNumber) &&
+                        t.getType().equalsIgnoreCase("WITHDRAWAL"))
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+
+        return result;
     }
 
     public int getTransactionCount() {
-        return transactionCount;
+        return transactions.size();
     }
 }
