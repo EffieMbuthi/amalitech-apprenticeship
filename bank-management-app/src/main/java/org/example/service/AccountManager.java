@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.exceptions.InvalidAccountException;
 import org.example.model.Account;
+
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,5 +45,15 @@ public class AccountManager {
 
     public int getAccountCount() {
         return accounts.size();
+    }
+
+
+    //freshly loaded accounts into AccountManager's private internal map
+    public void loadAccounts(Map<String, Account> loadedAccounts) {
+        accounts.putAll(loadedAccounts);
+    }
+
+    public Collection<Account> getAllAccounts() {
+        return accounts.values();
     }
 }

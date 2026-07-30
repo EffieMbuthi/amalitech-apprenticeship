@@ -1,5 +1,10 @@
 package org.example.model;
 
+import org.example.service.AccountManager;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 public abstract class Customer {
     private String customerId;
     private String name;

@@ -1,8 +1,10 @@
 package org.example.service;
 
+import org.example.model.Account;
 import org.example.model.Transaction;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TransactionManager {
     private List<Transaction> transactions;
@@ -55,5 +57,13 @@ public class TransactionManager {
 
     public int getTransactionCount() {
         return transactions.size();
+    }
+
+    public void loadTransactions(List<Transaction> loadedTransactions) {
+        transactions.addAll(loadedTransactions);
+    }
+
+    public List<Transaction> getAllTransactions() {
+        return transactions;
     }
 }

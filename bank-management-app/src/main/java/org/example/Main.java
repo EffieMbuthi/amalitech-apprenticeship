@@ -7,7 +7,10 @@ import org.example.exceptions.OverdraftExceededException;
 import org.example.model.*;
 import org.example.service.*;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -45,25 +48,48 @@ public class Main {
         }
     }
 
+    //since there's no dedicated customer collection anywhere, derive it from accounts using a Stream:
+    private static List<Customer> getAllCustomers(AccountManager accountManager) {
+        return accountManager.getAllAccounts().stream()
+                .map(Account::getCustomer)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         AccountManager accountManager = new AccountManager();
         TransactionManager transactionManager = new TransactionManager();
 
-        RegularCustomer c1 = new RegularCustomer("Amari Mutiso", 40, "0700000001", "Nairobi");
-        accountManager.addAccount(new SavingsAccount(c1, 5250.00));
+        FilePersistenceService fileService = new FilePersistenceService();
+        Map<String, Customer> customers = fileService.loadCustomers();
+        Map<String, Account> accounts = fileService.loadAccounts(customers);
+        List<Transaction> transactions = fileService.loadTransactions();
 
-        RegularCustomer c2 = new RegularCustomer("John Hefari", 35, "0700000002", "Nakuru");
-        accountManager.addAccount(new CheckingAccount(c2, 3450.00));
+        if (accounts.isEmpty()) {
+            // No saved data yet (first run) seed with starter accounts, same as before
+            RegularCustomer c1 = new RegularCustomer("Amari Mutiso", 40, "0700000001", "Nairobi");
+            accountManager.addAccount(new SavingsAccount(c1, 5250.00));
 
-        PremiumCustomer c3 = new PremiumCustomer("Michael Muhoro", 50, "0700000003", "Kiambu");
-        accountManager.addAccount(new SavingsAccount(c3, 15750.00));
+            RegularCustomer c2 = new RegularCustomer("John Hefari", 35, "0700000002", "Nakuru");
+            accountManager.addAccount(new CheckingAccount(c2, 3450.00));
 
-        RegularCustomer c4 = new RegularCustomer("Emma Njonjo", 29, "0700000004", "Mombasa");
-        accountManager.addAccount(new CheckingAccount(c4, 890.00));
+            PremiumCustomer c3 = new PremiumCustomer("Michael Muhoro", 50, "0700000003", "Kiambu");
+            accountManager.addAccount(new SavingsAccount(c3, 15750.00));
 
-        PremiumCustomer c5 = new PremiumCustomer("Kimanzi Oti", 60, "0700000005", "Nairobi");
-        accountManager.addAccount(new SavingsAccount(c5, 25300.00));
+            RegularCustomer c4 = new RegularCustomer("Emma Njonjo", 29, "0700000004", "Mombasa");
+            accountManager.addAccount(new CheckingAccount(c4, 890.00));
+
+            PremiumCustomer c5 = new PremiumCustomer("Kimanzi Oti", 60, "0700000005", "Nairobi");
+            accountManager.addAccount(new SavingsAccount(c5, 25300.00));
+
+            System.out.println("No saved data found — starting with default sample accounts.");
+        } else {
+            accountManager.loadAccounts(accounts);
+            transactionManager.loadTransactions(transactions);
+            System.out.println("✓ " + accounts.size() + " accounts loaded successfully from accounts.txt");
+            System.out.println("✓ " + transactions.size() + " transactions loaded from transactions.txt");
+        }
 
         boolean running = true;
         while (running) {
@@ -187,6 +213,9 @@ public class Main {
                 }
 
                 case 5:
+                    fileService.saveCustomers(getAllCustomers(accountManager));
+                    fileService.saveAccounts(accountManager.getAllAccounts());
+                    fileService.saveTransactions(transactionManager.getAllTransactions());
                     running = false;
                     System.out.println("Thank you for Banking with us!\nGoodbye!");
                     break;
