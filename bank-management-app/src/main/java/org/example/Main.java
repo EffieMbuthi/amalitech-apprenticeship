@@ -6,6 +6,7 @@ import org.example.exceptions.InvalidAmountException;
 import org.example.exceptions.OverdraftExceededException;
 import org.example.model.*;
 import org.example.service.*;
+import org.example.util.ValidationUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -108,7 +109,15 @@ public class Main {
                 case 1: {
                     String name = readLine(scanner, "Enter customer name: ");
                     int age = readInt(scanner, "Enter customer age: ");
-                    String contact = readLine(scanner, "Enter customer contact: ");
+
+                    String contact;
+                    while (true) {
+                        contact = readLine(scanner, "Enter customer contact (e.g. 0700000000): ");
+                        if (ValidationUtils.isValidPhone(contact))
+                            break;
+                        System.out.println("❌ Error: Invalid phone format. Please enter a valid 10-digit number starting with 0.");
+                    }
+
                     String address = readLine(scanner, "Enter customer address: ");
 
                     System.out.println("Customer type:\n1. Regular Customer\n2. Premium Customer");
@@ -142,6 +151,10 @@ public class Main {
 
                 case 3: {
                     String accNum = readLine(scanner, "Enter Account Number: ");
+                    if (!ValidationUtils.isValidAccountNumber(accNum)) {
+                        System.out.println("❌ Error: Invalid account number format. Expected format: ACC###");
+                        break;
+                    }
 
                     try{
                         Account account = accountManager.findAccount(accNum);
@@ -195,6 +208,10 @@ public class Main {
 
                 case 4: {
                     String histAccNum = readLine(scanner, "Enter Account Number: ");
+                    if (!ValidationUtils.isValidAccountNumber(histAccNum)) {
+                        System.out.println("❌ Error: Invalid account number format. Expected format: ACC###");
+                        break;
+                    }
 
                     try {
                         accountManager.findAccount(histAccNum);
