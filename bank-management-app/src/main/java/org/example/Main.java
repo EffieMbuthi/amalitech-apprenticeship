@@ -6,6 +6,7 @@ import org.example.exceptions.InvalidAmountException;
 import org.example.exceptions.OverdraftExceededException;
 import org.example.model.*;
 import org.example.service.*;
+import org.example.util.ConcurrencyUtils;
 import org.example.util.ValidationUtils;
 
 import java.util.List;
@@ -101,7 +102,8 @@ public class Main {
             System.out.println("2. View Accounts");
             System.out.println("3. Process Transaction");
             System.out.println("4. View Transaction History");
-            System.out.println("5. Exit");
+            System.out.println("5. Run Concurrent Simulation");
+            System.out.println("6. Exit");
 
             int choice = readInt(scanner, "Enter choice: ");
 
@@ -229,7 +231,18 @@ public class Main {
                     break;
                 }
 
-                case 5:
+                case 5: {
+                    String accNum = readLine(scanner, "Enter Account Number for simulation: ");
+                    try {
+                        Account account = accountManager.findAccount(accNum);
+                        ConcurrencyUtils.runConcurrentSimulation(account);
+                    } catch (InvalidAccountException e) {
+                        System.out.println("❌ ERROR: " + e.getMessage());
+                    }
+                    break;
+                }
+
+                case 6:
                     fileService.saveCustomers(getAllCustomers(accountManager));
                     fileService.saveAccounts(accountManager.getAllAccounts());
                     fileService.saveTransactions(transactionManager.getAllTransactions());

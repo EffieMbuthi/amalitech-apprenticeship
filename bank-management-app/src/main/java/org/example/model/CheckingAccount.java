@@ -39,7 +39,7 @@ public class CheckingAccount extends Account {
     // -overdraftLimit. E.g. with a $1,000 limit, balance can reach
     // -1000 but not lower. Using >= -overdraftLimit as the boundary.
     @Override
-    public void withdraw(double amount) {
+    public synchronized void withdraw(double amount) {
         if (amount <= 0) {
             throw new InvalidAmountException("The amount must be greater than 0");
         }

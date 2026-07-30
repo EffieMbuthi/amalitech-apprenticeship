@@ -37,7 +37,7 @@ public class SavingsAccount extends Account {
     // >= the $500 minimum. Using >= (not >) so a withdrawal that leaves
     // exactly $500 is accepted, not rejected.
     @Override
-    public void withdraw(double amount) {
+    public synchronized void withdraw(double amount) {
         if (amount<=0){
             throw new InvalidAmountException("The amount must be greater than 0");
         }

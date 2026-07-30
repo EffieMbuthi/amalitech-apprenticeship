@@ -59,7 +59,7 @@ public abstract class Account implements Transactable {
     }
 
 
-    public void deposit(double amount) {
+    public synchronized void deposit(double amount) {
         if (amount <= 0) {
             throw new InvalidAmountException("The amount must be greater than 0");
         } else {
@@ -71,7 +71,7 @@ public abstract class Account implements Transactable {
     // SavingsAccount enforces a minimum balance, CheckingAccount allows
     // overdraft up to a limit. Each subclass provides its own implementation.
     public abstract void withdraw(double amount);
-
+    // only concrete subclass implementation
 
     public static void setAccountCounter(int accountCounter) {
         Account.accountCounter = accountCounter;
